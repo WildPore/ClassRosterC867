@@ -4,7 +4,6 @@
 
 class Roster {
 public:
-  // E1.
   const static int ROSTER_SIZE = 5;
   Student *classRosterArray[ROSTER_SIZE] = {nullptr, nullptr, nullptr, nullptr,
                                             nullptr};

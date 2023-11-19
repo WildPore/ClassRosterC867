@@ -6,7 +6,7 @@ int main() {
   std::cout << "Scripting and Programming - Applications - C867\n";
   std::cout << "Programming language: C++\n";
   std::cout << "Student ID: 011651581\n";
-  std::cout << "Name: Lewis Parnell\n" << std::endl;
+  std::cout << "Name: Lewis Parnell\n\n";
 
   const std::string studentData[5] = {
       "A1,John,Smith,John1989@gm ail.com,20,30,35,40,SECURITY",
@@ -17,25 +17,33 @@ int main() {
 
   Roster *classRoster = new Roster();
 
-  for (int i = 0; i < sizeof(studentData) / sizeof(studentData[i]); i++) {
-    classRoster->parseStudent(studentData[i]);
+  for (const std::string &data : studentData) {
+    classRoster->parseStudent(data);
   }
 
+  std::cout << "Printing all students:\n";
   classRoster->printAll();
+
+  std::cout << "Printing invalid emails:\n";
   classRoster->printInvalidEmails();
 
-  for (int i = 0; i < classRoster->ROSTER_SIZE; i++) {
-    Student *student = classRoster->classRosterArray[i];
+  std::cout << "Printing average days in course for each student:\n";
+  for (const auto &student : classRoster->classRosterArray) {
     classRoster->printAverageDaysInCourse(student->getStudentID());
   }
 
+  std::cout << "\nPrinting students in the Software degree program:\n";
   classRoster->printByDegreeProgram(DegreeProgram::SOFTWARE);
-  classRoster->remove("A3");
-  classRoster->printAll();
+
+  std::cout << "Removing student A3.\n\n";
   classRoster->remove("A3");
 
-  // The destructor would automatically be called on program termination.
-  // For the sake of this assignment, I'm calling it explicitly.
+  std::cout << "Printing all students:\n";
+  classRoster->printAll();
+
+  std::cout << "Removing student A3 again, error expected.\n";
+  classRoster->remove("A3");
+
   delete classRoster;
 
   return 0;

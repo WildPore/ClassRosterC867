@@ -1,11 +1,12 @@
 #pragma once
 
-#include "degree.h"
+#include <iostream>
 #include <string>
+
+#include "degree.h"
 
 class Student {
 private:
-  // D1.
   std::string studentID;
   std::string firstName;
   std::string lastName;
@@ -14,45 +15,39 @@ private:
   int daysInCourse[3];
   DegreeProgram degreeProgram;
 
+  void printField(std::string fieldName, std::string fieldValue) const {
+    std::cout << fieldName << ": " << fieldValue << "\t";
+  };
+
 public:
-  // D2.
-  // Inline functions for getters and setters.
-  std::string getStudentID() const { return studentID; }
-  void setStudentID(std::string studentID) { this->studentID = studentID; };
+  std::string getStudentID() const;
+  void setStudentID(std::string studentID);
 
-  std::string getFirstName() const { return firstName; }
-  void setFirstName(std::string firstName) { this->firstName = firstName; };
+  std::string getFirstName() const;
+  void setFirstName(std::string firstName);
 
-  std::string getLastName() const { return lastName; }
-  void setLastName(std::string lastName) { this->lastName = lastName; };
+  std::string getLastName() const;
+  void setLastName(std::string lastName);
 
-  std::string getEmailAddress() const { return emailAddress; }
-  void setEmailAddress(std::string emailAddress) {
-    this->emailAddress = emailAddress;
-  };
+  std::string getEmailAddress() const;
+  void setEmailAddress(std::string emailAddress);
 
-  int getAge() const { return age; }
-  void setAge(int age) { this->age = age; };
+  int getAge() const;
+  void setAge(int age);
 
-  const int *getDaysInCourse() const { return daysInCourse; }
-  void setDaysInCourse(int daysInCourse[]) {
-    for (int i = 0; i < 3; i++) {
-      this->daysInCourse[i] = daysInCourse[i];
-    }
-  };
+  const int *getDaysInCourse() const;
+  void setDaysInCourse(int daysInCourse[]);
 
-  DegreeProgram getDegreeProgram() const { return degreeProgram; }
-  void setDegreeProgram(DegreeProgram degreeProgram) {
-    this->degreeProgram = degreeProgram;
-  };
+  DegreeProgram getDegreeProgram() const;
+  void setDegreeProgram(DegreeProgram degreeProgram);
 
-  // Print function.
   void print(bool includeStudentID, bool includeFirstName, bool includeLastName,
              bool includeEmailAddress, bool includeAge,
              bool includeDaysInCourse, bool includeDegreeProgram) const;
 
-  // Constructor.
   Student(std::string studentID, std::string firstName, std::string lastName,
           std::string emailAddress, int age, int daysInCourse[],
           DegreeProgram degreeProgram);
+
+  ~Student();
 };

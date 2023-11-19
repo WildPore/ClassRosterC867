@@ -1,6 +1,7 @@
 #include "roster.h"
 
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -8,6 +9,13 @@
 #include "degree.h"
 
 Roster::Roster() {}
+
+Roster::~Roster() {
+  for (int i = 0; i < ROSTER_SIZE; i++) {
+    delete classRosterArray[i];
+    classRosterArray[i] = nullptr;
+  }
+}
 
 void Roster::parseStudent(std::string studentData) {
   std::vector<std::string> studentDataVector;
@@ -20,14 +28,16 @@ void Roster::parseStudent(std::string studentData) {
   }
 
   DegreeProgram degreeProgram;
-  if (studentDataVector[8] == "SOFTWARE") {
-    degreeProgram = DegreeProgram::SOFTWARE;
-  } else if (studentDataVector[8] == "NETWORK") {
-    degreeProgram = DegreeProgram::NETWORK;
-  } else if (studentDataVector[8] == "SECURITY") {
-    degreeProgram = DegreeProgram::SECURITY;
+
+  std::map<std::string, DegreeProgram> degreeProgramMap = {
+      {"SOFTWARE", DegreeProgram::SOFTWARE},
+      {"NETWORK", DegreeProgram::NETWORK},
+      {"SECURITY", DegreeProgram::SECURITY}};
+
+  if (degreeProgramMap.count(studentDataVector[8]) > 0) {
+    degreeProgram = degreeProgramMap[studentDataVector[8]];
   } else {
-    degreeProgram = DegreeProgram::UNKNOWN;
+    throw std::invalid_argument("Invalid degree program.");
   }
 
   add(studentDataVector[0], studentDataVector[1], studentDataVector[2],
@@ -70,9 +80,9 @@ void Roster::remove(std::string studentID) {
 }
 
 void Roster::printAll() const {
-  for (int i = 0; i < ROSTER_SIZE; i++) {
-    if (classRosterArray[i] != nullptr) {
-      classRosterArray[i]->print(true, true, true, false, true, true, true);
+  for (const auto student : classRosterArray) {
+    if (student != nullptr) {
+      student->print(true, true, true, false, true, true, true);
     }
   }
 
@@ -85,9 +95,9 @@ void Roster::printAverageDaysInCourse(std::string studentID) const {
     if (classRosterArray[i] != nullptr &&
         classRosterArray[i]->getStudentID() == studentID) {
       const int *daysInCourse = classRosterArray[i]->getDaysInCourse();
-      std::cout << "Student ID: " << studentID << " - "
-                << (daysInCourse[0] + daysInCourse[1] + daysInCourse[2]) / 3
-                << " average days in course." << std::endl;
+      std::cout << "Student ID: " << studentID
+                << " - average number of days in course: "
+                << (daysInCourse[0] + daysInCourse[1] + daysInCourse[2]) / 3;
       found = true;
       break;
     }
@@ -107,7 +117,7 @@ void Roster::printInvalidEmails() const {
       if (emailAddress.find('@') == std::string::npos ||
           emailAddress.find('.') == std::string::npos ||
           emailAddress.find(' ') != std::string::npos) {
-        std::cout << emailAddress << std::endl;
+        std::cout << emailAddress << " is formatted incorrectly." << std::endl;
       }
     }
   }
@@ -124,11 +134,4 @@ void Roster::printByDegreeProgram(DegreeProgram degreeProgram) const {
   }
 
   std::cout << std::endl;
-}
-
-Roster::~Roster() {
-  for (int i = 0; i < ROSTER_SIZE; i++) {
-    delete classRosterArray[i];
-    classRosterArray[i] = nullptr;
-  }
 }
