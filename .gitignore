@@ -1,3 +1,5 @@
+*.zip
+*.png
 .vs
 x64
 *.sln
